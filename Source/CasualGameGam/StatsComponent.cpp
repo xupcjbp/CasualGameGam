@@ -41,6 +41,9 @@ void UStatsComponent::ResetHealth() {
 }
 
 void UStatsComponent::DecreaseHealth(float amount) {
+	if (CurrentHealth - amount <= 0) {
+		CurrentHealth = 0;
+	}
 	CurrentHealth = CurrentHealth - amount;
 }
 
