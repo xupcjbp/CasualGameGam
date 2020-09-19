@@ -11,6 +11,7 @@ class ACasualGameGamCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+public:
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
@@ -19,6 +20,9 @@ class ACasualGameGamCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UStatsComponent* StatsComponent;
+
 
 public:
 	ACasualGameGamCharacter();
@@ -26,9 +30,6 @@ public:
 	void NewCrouch();
 	void NewUnCrouch();
 
-	/** Initial Health */
-	UPROPERTY(EditAnywhere)
-		float InitialHealth;
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
@@ -38,21 +39,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
-	float GetCurrentHealth();
-
-	void DecreaseHealth(float amount);
-
-	void IncreaseHealth(float amount);
-
-	void ResetHealth();
+	UFUNCTION(BlueprintCallable)
+	UStatsComponent* GetStats() {
+		return StatsComponent;
+	}
 
 
 protected:
-
-	/** Current Health */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		float CurrentHealth;
-
 	
 
 	/** Resets HMD orientation in VR. */

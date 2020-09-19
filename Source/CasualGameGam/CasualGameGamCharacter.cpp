@@ -10,6 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Engine/CollisionProfile.h"
 #include "Engine/Engine.h"
+#include "StatsComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ACasualGameGamCharacter
@@ -47,9 +48,10 @@ ACasualGameGamCharacter::ACasualGameGamCharacter()
 
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 
-	InitialHealth = 100;
+	// Create Stat component
+	StatsComponent = CreateDefaultSubobject<UStatsComponent>(TEXT("StatsComponent"));
 
-	CurrentHealth = InitialHealth;
+
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
@@ -94,26 +96,11 @@ void ACasualGameGamCharacter::SetupPlayerInputComponent(class UInputComponent* P
 void ACasualGameGamCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, *FString::Printf(TEXT("Overlap:  %f"), CurrentHealth));
+	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, *FString::Printf(TEXT("Overlap:  %f"), StatsComponent->GetCurrentHealth()));
 	
 
 }
 
-float ACasualGameGamCharacter::GetCurrentHealth() {
-	return CurrentHealth;
-}
-
-void ACasualGameGamCharacter::ResetHealth() {
-	CurrentHealth = InitialHealth;
-}
-
-void ACasualGameGamCharacter::DecreaseHealth (float amount) {
-	CurrentHealth = CurrentHealth - amount;
-}
-
-void ACasualGameGamCharacter::IncreaseHealth(float amount) {
-	CurrentHealth = CurrentHealth + amount;
-}
 
 void ACasualGameGamCharacter::NewCrouch() {
 	Crouch();

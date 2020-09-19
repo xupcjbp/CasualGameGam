@@ -6,6 +6,7 @@
 #include "Engine/CollisionProfile.h"
 #include "Engine/Engine.h"
 #include "CasualGameGamCharacter.h"
+#include "StatsComponent.h"
 
 // Sets default values
 ATestHitbox::ATestHitbox()
@@ -23,8 +24,9 @@ void ATestHitbox::OverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, TEXT("Overlap begun: ") + OtherActor->GetName());
 	ACasualGameGamCharacter* Character = Cast<ACasualGameGamCharacter>(OtherActor);
 	
-	Character->DecreaseHealth(10);
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, *FString::Printf(TEXT("Overlap:  %f"), Character->GetCurrentHealth()));
+	UStatsComponent* CharStatsComponent = Character->GetStats();
+	CharStatsComponent->DecreaseHealth(10);
+	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, *FString::Printf(TEXT("Overlap:  %f"), CharStatsComponent->GetCurrentHealth()));
 }
 
 void ATestHitbox::OverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
