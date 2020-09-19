@@ -3,4 +3,4 @@
 
 #include "Util/Logging.h"
 
-DEFINE_LOG_CATEGORY( CGJ, Display, All );
+DEFINE_LOG_CATEGORY( CGJ );
