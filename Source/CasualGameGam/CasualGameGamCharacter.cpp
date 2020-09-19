@@ -43,6 +43,8 @@ ACasualGameGamCharacter::ACasualGameGamCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
@@ -57,8 +59,14 @@ void ACasualGameGamCharacter::SetupPlayerInputComponent(class UInputComponent* P
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
+	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &ACasualGameGamCharacter::NewCrouch);
+	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &ACasualGameGamCharacter::NewUnCrouch);
+
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACasualGameGamCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACasualGameGamCharacter::MoveRight);
+
+	
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
@@ -75,7 +83,13 @@ void ACasualGameGamCharacter::SetupPlayerInputComponent(class UInputComponent* P
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ACasualGameGamCharacter::OnResetVR);
 }
+void ACasualGameGamCharacter::NewCrouch() {
+	Crouch();
+}
 
+void ACasualGameGamCharacter::NewUnCrouch() {
+	UnCrouch();
+}
 
 void ACasualGameGamCharacter::OnResetVR()
 {

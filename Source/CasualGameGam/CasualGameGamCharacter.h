@@ -21,6 +21,9 @@ class ACasualGameGamCharacter : public ACharacter
 public:
 	ACasualGameGamCharacter();
 
+	void NewCrouch();
+	void NewUnCrouch();
+
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseTurnRate;
