@@ -1,8 +1,10 @@
 // Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
 
 #include "CasualGameGamGameMode.h"
+
 #include "CasualGameGamCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Util/Logging.h"
 
 ACasualGameGamGameMode::ACasualGameGamGameMode()
 {
@@ -15,4 +17,7 @@ ACasualGameGamGameMode::ACasualGameGamGameMode()
 }
 
 void ACasualGameGamGameMode::BeginPlay() {
+	UE_LOG( CGJ, Display, TEXT( "My name is %s" ), TEXT( "Jeffrey" ) );
+	UE_LOG( CGJ, Warning, TEXT( "My name is %s" ), TEXT( "Jeffrey" ) );
+	UE_LOG( CGJ, Error, TEXT( "My name is %s" ), TEXT( "Jeffrey" ) );
 }
