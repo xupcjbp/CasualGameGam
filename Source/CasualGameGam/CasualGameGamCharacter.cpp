@@ -8,6 +8,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Engine/CollisionProfile.h"
+#include "Engine/Engine.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ACasualGameGamCharacter
@@ -44,6 +46,10 @@ ACasualGameGamCharacter::ACasualGameGamCharacter()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
+
+	InitialHealth = 100;
+
+	CurrentHealth = InitialHealth;
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
@@ -83,6 +89,32 @@ void ACasualGameGamCharacter::SetupPlayerInputComponent(class UInputComponent* P
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ACasualGameGamCharacter::OnResetVR);
 }
+
+// Called when the game starts or when spawned
+void ACasualGameGamCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, *FString::Printf(TEXT("Overlap:  %f"), CurrentHealth));
+	
+
+}
+
+float ACasualGameGamCharacter::GetCurrentHealth() {
+	return CurrentHealth;
+}
+
+void ACasualGameGamCharacter::ResetHealth() {
+	CurrentHealth = InitialHealth;
+}
+
+void ACasualGameGamCharacter::DecreaseHealth (float amount) {
+	CurrentHealth = CurrentHealth - amount;
+}
+
+void ACasualGameGamCharacter::IncreaseHealth(float amount) {
+	CurrentHealth = CurrentHealth + amount;
+}
+
 void ACasualGameGamCharacter::NewCrouch() {
 	Crouch();
 }

@@ -18,11 +18,17 @@ class ACasualGameGamCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
+
 public:
 	ACasualGameGamCharacter();
 
 	void NewCrouch();
 	void NewUnCrouch();
+
+	/** Initial Health */
+	UPROPERTY(EditAnywhere)
+		float InitialHealth;
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
@@ -32,7 +38,22 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
+	float GetCurrentHealth();
+
+	void DecreaseHealth(float amount);
+
+	void IncreaseHealth(float amount);
+
+	void ResetHealth();
+
+
 protected:
+
+	/** Current Health */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float CurrentHealth;
+
+	
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
@@ -65,6 +86,8 @@ protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
+
+	void BeginPlay() override;
 
 public:
 	/** Returns CameraBoom subobject **/
