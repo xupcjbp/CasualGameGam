@@ -17,7 +17,7 @@ ATestHitbox::ATestHitbox()
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	BoxComponent->bHiddenInGame = false;
-
+	RootComponent = BoxComponent;
 }
 
 

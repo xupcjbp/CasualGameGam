@@ -10,11 +10,7 @@
 
 UDamageTakingComponent::UDamageTakingComponent()
 {
-	Stats = NewObject<UStatsObject> (
-		this,
-		UStatsObject::StaticClass(),
-		TEXT("StatsObject")
-		);
+	StatClass = UStatsObject::StaticClass();
 
 	//If owner is type ACharacter disable capsule component overlap event and attach to capsule (root) component
 	AActor* Owner = GetOwner();
@@ -49,11 +45,14 @@ void UDamageTakingComponent::BeginPlay() {
 
 	Super::BeginPlay();
 
-	
+	Stats = NewObject<UStatsObject> (
+		this,
+		StatClass.Get(),
+		TEXT("StatsObject")
+	);
+
 	OnComponentBeginOverlap.AddDynamic(this, &UDamageTakingComponent::OverlapBegin);
 	OnComponentEndOverlap.AddDynamic(this, &UDamageTakingComponent::OverlapEnd);
-
-	
 
 
 }

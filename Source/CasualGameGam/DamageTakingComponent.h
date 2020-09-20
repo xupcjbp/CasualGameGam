@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/CapsuleComponent.h"
+#include "StatsObject.h"
 #include "DamageTakingComponent.generated.h"
 
 /**
@@ -18,8 +19,11 @@ public:
 	// Sets default values for this component's properties
 	UDamageTakingComponent();
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UStatsObject> StatClass;
+
 	UPROPERTY()
-	class UStatsObject* Stats;
+	UStatsObject* Stats;
 
 	UFUNCTION()
 		void OverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
@@ -33,7 +37,4 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-
-	
 };

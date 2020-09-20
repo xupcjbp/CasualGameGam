@@ -9,7 +9,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS( Blueprintable, notplaceable )
 class CASUALGAMEGAM_API UStatsObject : public UObject
 {
 	GENERATED_BODY()

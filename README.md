@@ -3,7 +3,7 @@
 Developed with Unreal Engine 4
 
 ## Core
-Boss: stats, animation, animation logic, AI, stats
+Boss: stats, animation, animation logic, AI
 	routines; AI picks from routine
 Character: movement, animation, animation logic, control, skills, stats
 	use stock character first while jeff works on one
