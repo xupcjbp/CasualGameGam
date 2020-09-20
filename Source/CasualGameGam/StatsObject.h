@@ -3,19 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
-#include "StatsComponent.generated.h"
+#include "UObject/NoExportTypes.h"
+#include "StatsObject.generated.h"
 
-
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class CASUALGAMEGAM_API UStatsComponent : public UActorComponent
+/**
+ * 
+ */
+UCLASS()
+class CASUALGAMEGAM_API UStatsObject : public UObject
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	// Sets default values for this component's properties
-	UStatsComponent();
-	
+	UStatsObject();
+
 
 	float GetCurrentHealth();
 
@@ -26,13 +28,11 @@ public:
 	void IncreaseHealth(float amount);
 
 	void ResetHealth();
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float InitialHealth;
+		float InitialHealth;
 
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
 
 	/** Current Health */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -40,10 +40,4 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float AttackDamage;
-
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-		
 };

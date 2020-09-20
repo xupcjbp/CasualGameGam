@@ -5,16 +5,17 @@
 #include "Engine/Engine.h"
 #include "TimerManager.h"
 #include "Engine/World.h"
-#include "StatsComponent.h"
+#include "DamageTakingComponent.h"
+#include "StatsObject.h"
 
 // Sets default values
 ABossActor::ABossActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	FTimerHandle TimerHandle;
+	TimerHandle = FTimerHandle();
 
 	PrimaryActorTick.bCanEverTick = true;
-	StatsComponent = CreateDefaultSubobject<UStatsComponent>(TEXT("StatsComponent"));
+	DamageTakingComponent = CreateDefaultSubobject<UDamageTakingComponent>(TEXT("DamageTakingComponent"));
 	
 }
 
@@ -37,7 +38,7 @@ void ABossActor::Tick(float DeltaTime)
 
 //Decides what move to use and then calls the move function
 void ABossActor::DecideMove() {
-	if (StatsComponent->GetCurrentHealth() == 0) {
+	if (DamageTakingComponent->Stats->GetCurrentHealth() == 0) {
 		//Don't decide move and stop timer
 	}
 

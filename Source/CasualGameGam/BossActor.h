@@ -19,7 +19,7 @@ public:
 	// Sets default values for this actor's properties
 	ABossActor();
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	class UStatsComponent* StatsComponent;
+	class UDamageTakingComponent* DamageTakingComponent;
 
 protected:
 	// Called when the game starts or when spawned

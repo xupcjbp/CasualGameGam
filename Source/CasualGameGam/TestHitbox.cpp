@@ -6,7 +6,8 @@
 #include "Engine/CollisionProfile.h"
 #include "Engine/Engine.h"
 #include "CasualGameGamCharacter.h"
-#include "StatsComponent.h"
+#include "DamageTakingComponent.h"
+#include "StatsObject.h"
 
 // Sets default values
 ATestHitbox::ATestHitbox()
@@ -19,30 +20,13 @@ ATestHitbox::ATestHitbox()
 
 }
 
-void ATestHitbox::OverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, TEXT("Overlap begun: ") + OtherActor->GetName());
-	ACasualGameGamCharacter* Character = Cast<ACasualGameGamCharacter>(OtherActor);
-	
-	UStatsComponent* CharStatsComponent = Character->GetStats();
-	CharStatsComponent->DecreaseHealth(10);
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, *FString::Printf(TEXT("Overlap:  %f"), CharStatsComponent->GetCurrentHealth()));
-}
-
-void ATestHitbox::OverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	int32 OtherBodyIndex) {
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, TEXT("Overlap ended: ") + OtherActor->GetName());
-	
-
-}
 
 
 // Called when the game starts or when spawned
 void ATestHitbox::BeginPlay()
 {
+
 	Super::BeginPlay();
-	BoxComponent->OnComponentBeginOverlap.AddDynamic(this, &ATestHitbox::OverlapBegin);
-	BoxComponent->OnComponentEndOverlap.AddDynamic(this, &ATestHitbox::OverlapEnd);
 
 }
 

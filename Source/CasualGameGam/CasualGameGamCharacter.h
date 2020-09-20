@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "CasualGameGamCharacter.generated.h"
 
+
 UCLASS(config=Game)
 class ACasualGameGamCharacter : public ACharacter
 {
@@ -21,7 +22,7 @@ public:
 	class UCameraComponent* FollowCamera;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	class UStatsComponent* StatsComponent;
+	class UDamageTakingComponent* DamageTakingComponent;
 
 
 public:
@@ -40,9 +41,11 @@ public:
 	float BaseLookUpRate;
 
 	UFUNCTION(BlueprintCallable)
-	UStatsComponent* GetStats() {
-		return StatsComponent;
+	UDamageTakingComponent* GetDTC() {
+		return DamageTakingComponent;
 	}
+
+	class UStatsObject* GetStats();
 
 
 protected:

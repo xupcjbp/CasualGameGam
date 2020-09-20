@@ -10,7 +10,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Engine/CollisionProfile.h"
 #include "Engine/Engine.h"
-#include "StatsComponent.h"
+#include "DamageTakingComponent.h"
+#include "StatsObject.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ACasualGameGamCharacter
@@ -48,13 +49,23 @@ ACasualGameGamCharacter::ACasualGameGamCharacter()
 
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 
-	// Create Stat component
-	StatsComponent = CreateDefaultSubobject<UStatsComponent>(TEXT("StatsComponent"));
-
+	// Create DTC component
+	DamageTakingComponent = CreateDefaultSubobject<UDamageTakingComponent>(TEXT("DamageTakingComponent"));
+	DamageTakingComponent->InitCapsuleSize(42.f, 96.0f);
+	DamageTakingComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
+	DamageTakingComponent->CanCharacterStepUpOn = ECB_No;
+	DamageTakingComponent->SetShouldUpdatePhysicsVolume(true);
+	DamageTakingComponent->SetCanEverAffectNavigation(false);
+	DamageTakingComponent->bDynamicObstacle = true;
+	GetCharacterMovement()->UpdatedComponent = DamageTakingComponent;
 
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+}
+
+UStatsObject* ACasualGameGamCharacter::GetStats() {
+	return DamageTakingComponent->Stats;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -92,12 +103,13 @@ void ACasualGameGamCharacter::SetupPlayerInputComponent(class UInputComponent* P
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &ACasualGameGamCharacter::OnResetVR);
 }
 
+
+
 // Called when the game starts or when spawned
 void ACasualGameGamCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, *FString::Printf(TEXT("Overlap:  %f"), StatsComponent->GetCurrentHealth()));
-	
+	GetCharacterMovement()->UpdateNavAgent(*DamageTakingComponent);
 
 }
 
