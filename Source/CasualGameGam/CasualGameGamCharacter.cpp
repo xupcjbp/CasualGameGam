@@ -18,6 +18,7 @@
 
 ACasualGameGamCharacter::ACasualGameGamCharacter()
 {
+	
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -51,13 +52,17 @@ ACasualGameGamCharacter::ACasualGameGamCharacter()
 
 	// Create DTC component
 	DamageTakingComponent = CreateDefaultSubobject<UDamageTakingComponent>(TEXT("DamageTakingComponent"));
-	DamageTakingComponent->InitCapsuleSize(42.f, 96.0f);
-	DamageTakingComponent->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
+	
+	//RootComponent = DamageTakingComponent;
+	
+
+	/*GetCharacterMovement()->UpdatedComponent = DamageTakingComponent;
 	DamageTakingComponent->CanCharacterStepUpOn = ECB_No;
 	DamageTakingComponent->SetShouldUpdatePhysicsVolume(true);
 	DamageTakingComponent->SetCanEverAffectNavigation(false);
 	DamageTakingComponent->bDynamicObstacle = true;
-	GetCharacterMovement()->UpdatedComponent = DamageTakingComponent;
+	DamageTakingComponent->SetCanEverAffectNavigation(bCanAffectNavigationGeneration);*/
+	
 
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 

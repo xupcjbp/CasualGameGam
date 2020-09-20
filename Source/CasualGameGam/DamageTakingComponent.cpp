@@ -16,10 +16,12 @@ UDamageTakingComponent::UDamageTakingComponent()
 		TEXT("StatsObject")
 		);
 
-	//If owner is type ACharacter disable capsule component overlap event
+	//If owner is type ACharacter disable capsule component overlap event and attach to capsule (root) component
 	AActor* Owner = GetOwner();
 	if (Cast<ACharacter>(Owner) != nullptr) {
 		Cast<ACharacter>(Owner)->GetCapsuleComponent()->SetGenerateOverlapEvents(false);
+		SetupAttachment(Cast<ACharacter>(Owner)->GetCapsuleComponent());
+		SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 	}
 
 }
