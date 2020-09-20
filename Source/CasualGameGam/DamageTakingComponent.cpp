@@ -27,10 +27,11 @@ void UDamageTakingComponent::OverlapBegin(UPrimitiveComponent* OverlappedComp, A
 
 
 	UPrimitiveComponent* Weapon = OtherComp;
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, TEXT("Overlap begun with: ") + Weapon->GetName());
+	float DamageTaken = GetDamageAmount(OtherActor, Weapon);
+	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, TEXT("Overlap begun with: ") + Weapon->GetName() + FString::Printf(TEXT("Damage taken = %f"), DamageTaken));
 	
 	
-	Stats->DecreaseHealth(10);
+	Stats->DecreaseHealth(DamageTaken);
 	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, *FString::Printf(TEXT("Current Health:  %f"),Stats->GetCurrentHealth()));
 }
 
@@ -55,4 +56,24 @@ void UDamageTakingComponent::BeginPlay() {
 	OnComponentEndOverlap.AddDynamic(this, &UDamageTakingComponent::OverlapEnd);
 
 
+}
+
+float UDamageTakingComponent::GetDamageAmount (AActor* Aggressor, UPrimitiveComponent* Weapon) {
+	float AttackDamage = 0;
+	float WeaponDamage = 0;
+	if (Cast<ACharacter>(Aggressor) != nullptr && CheckActorDTC(Aggressor)!= nullptr) {
+		AttackDamage = CheckActorDTC(Aggressor)->Stats->GetAttackDamage();
+	}
+
+	if (Weapon->GetName() == "BoxWeapon") {
+		WeaponDamage =  1;
+	}
+	return AttackDamage + WeaponDamage;
+
+}
+
+
+UDamageTakingComponent* UDamageTakingComponent::CheckActorDTC(AActor* Actor) {
+	UDamageTakingComponent* DTC = Cast<UDamageTakingComponent>(Actor->FindComponentByClass(UDamageTakingComponent::StaticClass()));
+	return DTC;
 }

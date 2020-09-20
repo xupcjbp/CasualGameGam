@@ -37,4 +37,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	float GetDamageAmount(AActor* Agressor, UPrimitiveComponent* Weapon);
+
+	UDamageTakingComponent* CheckActorDTC(AActor* Actor);
 };
