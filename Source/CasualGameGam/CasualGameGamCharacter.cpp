@@ -52,16 +52,6 @@ ACasualGameGamCharacter::ACasualGameGamCharacter()
 
 	// Create DTC component
 	DamageTakingComponent = CreateDefaultSubobject<UDamageTakingComponent>(TEXT("DamageTakingComponent"));
-	
-	//RootComponent = DamageTakingComponent;
-	
-
-	/*GetCharacterMovement()->UpdatedComponent = DamageTakingComponent;
-	DamageTakingComponent->CanCharacterStepUpOn = ECB_No;
-	DamageTakingComponent->SetShouldUpdatePhysicsVolume(true);
-	DamageTakingComponent->SetCanEverAffectNavigation(false);
-	DamageTakingComponent->bDynamicObstacle = true;
-	DamageTakingComponent->SetCanEverAffectNavigation(bCanAffectNavigationGeneration);*/
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
@@ -112,9 +102,6 @@ void ACasualGameGamCharacter::SetupPlayerInputComponent(class UInputComponent* P
 void ACasualGameGamCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	//GetCharacterMovement()->UpdateNavAgent(*DamageTakingComponent);
-	//FAttachmentTransformRules rules{ EAttachmentRule::SnapToTarget, false };
-	//AttachToComponent( DamageTakingComponent, rules );
 	
 }
 
