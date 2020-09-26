@@ -53,6 +53,7 @@ ACasualGameGamCharacter::ACasualGameGamCharacter()
 
 	// Create DTC component
 	DamageTakingComponent = CreateDefaultSubobject<UDamageTakingComponent>(TEXT("DamageTakingComponent"));
+	DamageTakingComponent->SetupAttachment(RootComponent);
 
 	
 	// Check if key is pressed
