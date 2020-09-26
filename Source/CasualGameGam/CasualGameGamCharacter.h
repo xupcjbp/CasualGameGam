@@ -24,13 +24,19 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UDamageTakingComponent* DamageTakingComponent;
 
+	UPROPERTY(EditAnywhere)
+	class UAnimMontage* LeftAnimation;
+
+	UPROPERTY(EditAnywhere)
+	class UAnimMontage* RightAnimation;
+
 
 public:
 	ACasualGameGamCharacter();
 
 	void NewCrouch();
 	void NewUnCrouch();
-
+	void Dash();
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
@@ -49,7 +55,16 @@ public:
 
 
 protected:
-	
+	//Keep track of directional inputs
+	FVector CurrentForwardVector = FVector(0);
+	FVector CurrentRightVector = FVector(0);
+
+
+	//Flag for which light attack was used previously
+	bool UseLeftAttack = true;
+
+	//Callback for light attack
+	void LightAttack();
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();

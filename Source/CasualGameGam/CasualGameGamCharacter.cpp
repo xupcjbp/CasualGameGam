@@ -12,6 +12,7 @@
 #include "Engine/Engine.h"
 #include "DamageTakingComponent.h"
 #include "StatsObject.h"
+#include "tuple"
 
 //////////////////////////////////////////////////////////////////////////
 // ACasualGameGamCharacter
@@ -53,6 +54,9 @@ ACasualGameGamCharacter::ACasualGameGamCharacter()
 	// Create DTC component
 	DamageTakingComponent = CreateDefaultSubobject<UDamageTakingComponent>(TEXT("DamageTakingComponent"));
 
+	
+	// Check if key is pressed
+	
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
@@ -73,6 +77,10 @@ void ACasualGameGamCharacter::SetupPlayerInputComponent(class UInputComponent* P
 
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &ACasualGameGamCharacter::NewCrouch);
 	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &ACasualGameGamCharacter::NewUnCrouch);
+
+	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &ACasualGameGamCharacter::Dash);
+
+	PlayerInputComponent->BindAction("LightAttack", IE_Pressed, this, &ACasualGameGamCharacter::LightAttack);
 
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACasualGameGamCharacter::MoveForward);
@@ -103,6 +111,22 @@ void ACasualGameGamCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void ACasualGameGamCharacter::LightAttack() {
+	if (UseLeftAttack == true) {
+		PlayAnimMontage(LeftAnimation);
+		UseLeftAttack = false;
+	}
+	else {
+		PlayAnimMontage(RightAnimation);
+		UseLeftAttack = true;
+	}
+}
+
+void ACasualGameGamCharacter::Dash() {
+	FVector FinalDirection = CurrentForwardVector + CurrentRightVector;
+	AddMovementInput(FinalDirection, 10);
 }
 
 
@@ -152,7 +176,14 @@ void ACasualGameGamCharacter::MoveForward(float Value)
 		// get forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 		AddMovementInput(Direction, Value);
+		
+		CurrentForwardVector = Direction * Value;
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, CurrentForwardVector.ToString());
 	}
+	else {
+		CurrentForwardVector.Set(0, 0, 0);
+	}
+	
 }
 
 void ACasualGameGamCharacter::MoveRight(float Value)
@@ -167,5 +198,9 @@ void ACasualGameGamCharacter::MoveRight(float Value)
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
+		CurrentRightVector = Direction * Value;
+	}
+	else {
+		CurrentRightVector.Set(0,0,0);
 	}
 }
