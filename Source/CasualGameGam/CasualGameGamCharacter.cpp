@@ -144,7 +144,6 @@ void ACasualGameGamCharacter::HeavyAttack(float value) {
 	//Heavy Attack Release Animation
 	if (FramesSinceRelease > 0) {
 		HeavyAttackComponent->AddLocalOffset(FVector(0,0,4));
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, FString::FromInt(FramesSinceRelease));
 
 		//Release animation ends
 		if (FramesSinceRelease == 70) {
@@ -168,7 +167,6 @@ void ACasualGameGamCharacter::HeavyAttack(float value) {
 
 	//Charging
 	else if (value != 0) {
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, FString::FromInt(HeavyAttackStatus));
 
 		//Only set visibility when charging has just begun
 		if (HeavyAttackStatus == false) {
@@ -243,7 +241,6 @@ void ACasualGameGamCharacter::MoveForward(float Value)
 		AddMovementInput(Direction, Value);
 		
 		CurrentForwardVector = Direction * Value;
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, CurrentForwardVector.ToString());
 	}
 	else {
 		CurrentForwardVector.Set(0, 0, 0);
