@@ -4,6 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
+class UAnimMontage;
+class USkeletalMeshComponent;
+
 #include "BossActor.generated.h"
 
 UCLASS()
@@ -11,15 +15,34 @@ class CASUALGAMEGAM_API ABossActor : public AActor
 {
 	GENERATED_BODY()
 
+public:
+	UPROPERTY(VisibleAnywhere)
+	USkeletalMeshComponent *BossComponent;
 
-	FTimerHandle TimerHandle;
-
-	
-public:	
-	// Sets default values for this actor's properties
-	ABossActor();
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UDamageTakingComponent* DamageTakingComponent;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage *PlateAtkAnimMontage;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage *CubePushAtkAnimMontage;
+	UPROPERTY(EditAnywhere)
+	UAnimMontage *CubeSwingAtkAnimMontage;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage *Sphere1AtkAnimMontage;
+	UPROPERTY(EditAnywhere)
+	UAnimMontage *Sphere2AtkAnimMontage;
+	UPROPERTY(EditAnywhere)
+	UAnimMontage *Sphere3AtkAnimMontage;
+	UPROPERTY(EditAnywhere)
+	UAnimMontage *Sphere4AtkAnimMontage;
+
+	ABossActor();
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -37,8 +60,9 @@ protected:
 
 	void Move5();
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	void PerforMove( UAnimMontage *montage );
 
+
+private:
+	FTimerHandle TimerHandle;
 };

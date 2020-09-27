@@ -2,11 +2,13 @@
 
 
 #include "BossActor.h"
-#include "Engine/Engine.h"
-#include "TimerManager.h"
-#include "Engine/World.h"
+#include "Animation/AnimInstance.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "DamageTakingComponent.h"
+#include "Engine/Engine.h"
+#include "Engine/World.h"
 #include "StatsObject.h"
+#include "TimerManager.h"
 
 // Sets default values
 ABossActor::ABossActor()
@@ -15,8 +17,12 @@ ABossActor::ABossActor()
 	TimerHandle = FTimerHandle();
 
 	PrimaryActorTick.bCanEverTick = true;
-	DamageTakingComponent = CreateDefaultSubobject<UDamageTakingComponent>(TEXT("DamageTakingComponent"));
 	
+	DamageTakingComponent = CreateDefaultSubobject<UDamageTakingComponent>(TEXT("DamageTakingComponent"));
+	RootComponent = DamageTakingComponent;
+
+	BossComponent = CreateDefaultSubobject<USkeletalMeshComponent>( TEXT( "BossComponent" ) );
+	BossComponent->SetupAttachment( RootComponent );
 }
 
 // Called when the game starts or when spawned
@@ -25,8 +31,7 @@ void ABossActor::BeginPlay()
 	Super::BeginPlay();
 
 	//Set timer for DecideMove
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABossActor::DecideMove, 5, true);
-	
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ABossActor::DecideMove, 4, true);
 }
 
 // Called every frame
@@ -42,7 +47,7 @@ void ABossActor::DecideMove() {
 		//Don't decide move and stop timer
 	}
 
-	int MoveNum = rand() % 5 + 1;
+	int MoveNum = rand() % 2 + 4;
 	switch (MoveNum) {
 	case 1:
 		Move1();
@@ -68,21 +73,39 @@ void ABossActor::DecideMove() {
 
 void ABossActor::Move1() {
 	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, TEXT("Move 1 Activated"));
+
+	PerforMove( PlateAtkAnimMontage );
 }
 
 void ABossActor::Move2() {
 	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, TEXT("Move 2 Activated"));
+
+	PerforMove( CubePushAtkAnimMontage );
 }
 
 void ABossActor::Move3() {
 	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, TEXT("Move 3 Activated"));
+
+	PerforMove( CubeSwingAtkAnimMontage );
 }
 
 void ABossActor::Move4() {
 	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, TEXT("Move 4 Activated"));
+
+	PerforMove( Sphere1AtkAnimMontage );
+	PerforMove( Sphere3AtkAnimMontage );
 }
 
 void ABossActor::Move5() {
 	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, TEXT("Move 5 Activated"));
+
+	PerforMove( Sphere2AtkAnimMontage );
+	PerforMove( Sphere4AtkAnimMontage );
 }
 
+void ABossActor::PerforMove( UAnimMontage *montage ) {
+	UAnimInstance *AnimInstance = (BossComponent)? BossComponent->GetAnimInstance() : nullptr;
+	if( AnimInstance && montage ) {
+		AnimInstance->Montage_Play( montage, 1.f, EMontagePlayReturnType::Duration, 0.f, false );
+	}
+}
