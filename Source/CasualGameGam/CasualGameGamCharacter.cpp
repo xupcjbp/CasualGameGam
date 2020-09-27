@@ -127,6 +127,13 @@ void ACasualGameGamCharacter::BeginPlay()
 	
 }
 
+// Called every frame
+void ACasualGameGamCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
 
 
 void ACasualGameGamCharacter::LightAttack() {

@@ -33,6 +33,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UAnimMontage* RightAnimation;
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
 
 public:
 	ACasualGameGamCharacter();
