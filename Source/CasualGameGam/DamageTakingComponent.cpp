@@ -14,11 +14,11 @@ UDamageTakingComponent::UDamageTakingComponent()
 
 	//If owner is type ACharacter disable capsule component overlap event and attach to capsule (root) component
 	AActor* Owner = GetOwner();
+
 	if (Cast<ACharacter>(Owner) != nullptr) {
 		Cast<ACharacter>(Owner)->GetCapsuleComponent()->SetGenerateOverlapEvents(false);
-		SetupAttachment(Cast<ACharacter>(Owner)->GetCapsuleComponent());
-		SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
-	}
+		SetupAttachment(Cast<ACharacter>(Owner)->GetCapsuleComponent()) ;
+	}	SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
 
 }
 
@@ -68,6 +68,27 @@ float UDamageTakingComponent::GetDamageAmount (AActor* Aggressor, UPrimitiveComp
 	if (Weapon->GetName() == "BoxWeapon") {
 		WeaponDamage =  1;
 	}
+
+	else if (Weapon->GetName() == "LightAttack") {
+		WeaponDamage = 10;
+	}
+
+	else if (Weapon->GetName() == "HeavyAttackComponent") {
+		WeaponDamage = 20;
+	}
+	
+	else if (Weapon->GetName() == "PlateAttack") {
+		WeaponDamage = 10;
+	}
+
+	else if (Weapon->GetName() == "SphereAttack") {
+		WeaponDamage = 20;
+	}
+
+	else if (Weapon->GetName() == "CubeAttack") {
+		WeaponDamage = 25;
+	}
+	
 	return AttackDamage + WeaponDamage;
 
 }
