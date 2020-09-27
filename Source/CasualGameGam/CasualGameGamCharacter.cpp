@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -55,6 +56,17 @@ ACasualGameGamCharacter::ACasualGameGamCharacter()
 	DamageTakingComponent = CreateDefaultSubobject<UDamageTakingComponent>(TEXT("DamageTakingComponent"));
 	DamageTakingComponent->SetupAttachment(RootComponent);
 
+	//Create Heavy Attack component
+	HeavyAttackComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HeavyAttackComponent"));
+	HeavyAttackComponent->SetupAttachment(RootComponent);
+	FVector InitHeavyAttackScale = FVector(0.5, 0.5, 0.5);
+	FVector InitHeavyAttackLocation = FVector(0, 0, 150);
+	FRotator InitHeavyAttackRotation = FRotator(0, 90, -140);
+	HeavyAttackComponent->SetRelativeScale3D(InitHeavyAttackScale);
+	HeavyAttackComponent->SetRelativeLocation(InitHeavyAttackLocation);
+	HeavyAttackComponent->SetRelativeRotation(InitHeavyAttackRotation);
+	HeavyAttackComponent->SetVisibility(false);
+
 	
 	// Check if key is pressed
 	
@@ -84,10 +96,11 @@ void ACasualGameGamCharacter::SetupPlayerInputComponent(class UInputComponent* P
 	PlayerInputComponent->BindAction("LightAttack", IE_Pressed, this, &ACasualGameGamCharacter::LightAttack);
 
 
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &ACasualGameGamCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ACasualGameGamCharacter::MoveRight);
 
-	
+	PlayerInputComponent->BindAxis("HeavyAttack", this, &ACasualGameGamCharacter::HeavyAttack);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
@@ -114,6 +127,8 @@ void ACasualGameGamCharacter::BeginPlay()
 	
 }
 
+
+
 void ACasualGameGamCharacter::LightAttack() {
 	if (UseLeftAttack == true) {
 		PlayAnimMontage(LeftAnimation);
@@ -124,6 +139,55 @@ void ACasualGameGamCharacter::LightAttack() {
 		UseLeftAttack = true;
 	}
 }
+
+void ACasualGameGamCharacter::HeavyAttack(float value) {
+	//Heavy Attack Release Animation
+	if (FramesSinceRelease > 0) {
+		HeavyAttackComponent->AddLocalOffset(FVector(0,0,4));
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, FString::FromInt(FramesSinceRelease));
+
+		//Release animation ends
+		if (FramesSinceRelease == 70) {
+			FramesSinceRelease = 0;
+			HeavyAttackComponent->SetVisibility(false);
+			HeavyAttackComponent->SetRelativeLocation(FVector(0, 0, 130));
+			FVector InitHeavyAttackScale = FVector(0.5, 0.5, 0.5);
+			HeavyAttackComponent->SetRelativeScale3D(InitHeavyAttackScale);
+			return;
+		}
+
+		FramesSinceRelease += 1;
+		return;
+	}
+
+	//If Button is not being pressed and was just released
+	if(value == 0 && HeavyAttackStatus == true){
+		HeavyAttackStatus = false;
+		FramesSinceRelease = 1;
+	}
+
+	//Charging
+	else if (value != 0) {
+		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Yellow, FString::FromInt(HeavyAttackStatus));
+
+		//Only set visibility when charging has just begun
+		if (HeavyAttackStatus == false) {
+			HeavyAttackComponent->SetVisibility(true);
+		}
+		//Increase size 
+		if (HeavyAttackComponent->GetComponentScale().X < 1)
+		{
+			FVector NewScale = HeavyAttackComponent->GetComponentScale();
+			NewScale = NewScale + 0.004;
+			HeavyAttackComponent->SetRelativeScale3D(NewScale);
+		}
+		
+
+		HeavyAttackStatus = true;
+	}
+	
+}
+
 
 void ACasualGameGamCharacter::Dash() {
 	FVector FinalDirection = CurrentForwardVector + CurrentRightVector;

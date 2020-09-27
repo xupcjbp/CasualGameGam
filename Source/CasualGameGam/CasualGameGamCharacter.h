@@ -24,6 +24,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UDamageTakingComponent* DamageTakingComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UStaticMeshComponent* HeavyAttackComponent;
+
 	UPROPERTY(EditAnywhere)
 	class UAnimMontage* LeftAnimation;
 
@@ -65,6 +68,16 @@ protected:
 
 	//Callback for light attack
 	void LightAttack();
+
+	//Callbacks for heavy attack
+	void HeavyAttack(float value);
+
+
+	//Flag for heavy attack charge status
+	bool HeavyAttackStatus = false;
+
+	//Tracking for frames since heavy attack release
+	int FramesSinceRelease = 0;
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
