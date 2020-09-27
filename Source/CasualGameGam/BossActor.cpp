@@ -47,7 +47,7 @@ void ABossActor::DecideMove() {
 		//Don't decide move and stop timer
 	}
 
-	int MoveNum = rand() % 2 + 4;
+	int MoveNum = rand() % 5 + 1;
 	switch (MoveNum) {
 	case 1:
 		Move1();
